@@ -1,14 +1,27 @@
 import React from "react";
 import { useEffect, useState } from "react";
+import { loadTweets } from "../lookup";
 
 export function ActionBtn(props) {
   const { tweet, action } = props;
-  const className = props.className
-    ? props.className
-    : "btn btn-primary btn-sm";
-  return action.type === "like" ? (
-    <button className={className}> {tweet.likes} Likes</button>
-  ) : null;
+  const className = props.className ? props.className : "btn btn-primary btn-sm";
+  let [likes, setLikes] = useState(tweet.likes ? tweet.likes : 0)
+  const [userLike, setUserLike] = useState(tweet.userLike === true ? true: false)
+  const actionDisplay = action.display ? action.display : 'action';
+  const display  = action.type === 'like' ? `${likes} ${actionDisplay}` : actionDisplay
+  const handleClick = (event) => {
+    event.preventDefault();
+    if (action.type === 'like') {
+        if (userLike === true){
+            setLikes(likes - 1)
+            setUserLike(false)
+        }else {
+            setLikes(likes + 1)
+            setUserLike(true)
+            }
+        }
+    }
+    return <button className={className} onClick={handleClick}>{display}</button>   
 }
 
 function Tweet(props) {
@@ -20,30 +33,16 @@ function Tweet(props) {
     <div className={className}>
       <p>{tweet.content}</p>
       <div className="btn btn-group">
-        <ActionBtn tweet={tweet} action={{ type: "like" }} />
+        <ActionBtn tweet={tweet} action={{ type: "like", display:'like'}} />
+        <ActionBtn tweet={tweet} action={{ type: "unlike", display:'Unlike'}} />
+        <ActionBtn tweet={tweet} action={{ type: "Retweet", display:'Retweet'}} />
       </div>
     </div>
   );
 }
 
-function loadTweets(callback) {
-    const xhr = new XMLHttpRequest()
-    const method = 'GET' // "POST"
-    const url = "http://127.0.0.1:8000/api/tweets/"
-    const responseType = "json"
-    xhr.responseType = responseType
-    xhr.open(method, url)
-    xhr.onload = function() {
-      callback(xhr.response, xhr.status)
-    }
-    xhr.onerror = function (e) {
-      console.log(e)
-      callback({"message": "The request was an error"}, 400)
-    }
-    xhr.send()
-  }
-  
-  export function TweetsList(props) {
+
+export function TweetsList(props) {
     const [tweets, setTweets] = useState([])
     useEffect(() => {
       const myCallback = (response, status) => {
