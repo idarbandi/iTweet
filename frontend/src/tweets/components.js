@@ -1,6 +1,26 @@
-import React from "react";
+import React, { createRef } from "react";
 import { useEffect, useState } from "react";
 import { loadTweets } from "../lookup";
+
+export function TweetsComponent(props) {
+  const textAreaRef = createRef()
+  const handleSubmit = (event) => {
+    event.preventDefault();
+    const newVal = 
+    textAreaRef.current.value= ''
+  }
+  return (
+  <div className={props.className}>
+    <div className="col-12 mb-3">
+    <form onSubmit={handleSubmit}>
+    <textarea ref={textAreaRef} required={true} className="form-control" name="tweet"></textarea>
+    <button  type="submit" className="btn btn-control my-3 bg-info">Tweet</button>
+  </form>
+  <TweetsList/>
+  </div>
+  </div>
+  )
+}
 
 export function ActionBtn(props) {
   const { tweet, action } = props;
