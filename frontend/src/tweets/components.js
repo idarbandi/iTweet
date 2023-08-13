@@ -4,9 +4,17 @@ import { loadTweets } from "../lookup";
 
 export function TweetsComponent(props) {
   const textAreaRef = createRef()
+  const [newTweets, setnewTweets] = useState([])
   const handleSubmit = (event) => {
     event.preventDefault();
-    const newVal = 
+    const newVal =  textAreaRef.current.value
+    let tempNewTweets = [...newTweets]
+    tempNewTweets.unshift({
+      content: newVal,
+      likes: 0,
+      id: 12344
+    })
+    setnewTweets(tempNewTweets)
     textAreaRef.current.value= ''
   }
   return (
@@ -16,7 +24,7 @@ export function TweetsComponent(props) {
     <textarea ref={textAreaRef} required={true} className="form-control" name="tweet"></textarea>
     <button  type="submit" className="btn btn-control my-3 bg-info">Tweet</button>
   </form>
-  <TweetsList/>
+  <TweetsList newTweets={newTweets}/>
   </div>
   </div>
   )
@@ -63,11 +71,18 @@ function Tweet(props) {
 
 
 export function TweetsList(props) {
+    const [tweetsInit, setTweetsInit] = useState([])
     const [tweets, setTweets] = useState([])
+    useEffect(() => {
+      const final = [...props.newTweets].concat(tweetsInit)
+      if (final.length !== tweets.length) {
+        setTweets(final)
+      }
+    }, [props.newTweets, tweets, tweetsInit])
     useEffect(() => {
       const myCallback = (response, status) => {
         if (status === 200) {
-          setTweets(response)
+          setTweetsInit(response)
         }
         else {
           alert("Error")
