@@ -9,7 +9,7 @@ from tweets.views import (home_view, tweet_action_view, tweet_create_view,
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path("react/", TemplateView.as_view(template_name='react.html')),
+    path("react/", TemplateView.as_view(template_name='react_via_dj.html')),
     path('', home_view),
     path('create-tweet', tweet_create_view),
     path('tweets', tweet_list_view),
