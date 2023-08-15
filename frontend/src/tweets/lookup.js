@@ -6,7 +6,7 @@ export function apiTweetCreate(newTweet, callback) {
 
 export function apiTweetAction(tweetId, action, callback) {
     const data = {id: tweetId, action: action}
-    backendLookup('POST', '/tweets/create/', callback, data);
+    backendLookup('POST', '/tweets/action/', callback, data);
   }
   
 
