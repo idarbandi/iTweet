@@ -5,20 +5,20 @@ import App from './App';
 import { TweetsComponent } from './tweets';
 import reportWebVitals from './reportWebVitals';
 
+const TweetsEl = document.getElementById('iTweet')
 const root = ReactDOM.createRoot(document.getElementById('root'));
-const tweetsRoot = ReactDOM.createRoot(document.getElementById('iTweet'));
-if (root) {
-  root.render(
-    <React.StrictMode>
-      <App />
-    </React.StrictMode>
-  );
-}
+const tweetsRoot = ReactDOM.createRoot(TweetsEl);
 
 if (tweetsRoot) {
   tweetsRoot.render(
     <React.StrictMode>
-      <TweetsComponent />
+      <TweetsComponent dataset={TweetsEl.dataset}/>
+    </React.StrictMode>
+  );
+} else if (root) {
+  root.render(
+    <React.StrictMode>
+      <App />
     </React.StrictMode>
   );
 }
