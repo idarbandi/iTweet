@@ -39,19 +39,19 @@ export function TweetsComponent(props) {
 }
 
 export function ActionBtn(props) {
-  const { tweet, action } = props;
+  const { tweet, action, didPerformAction } = props;
   const className = props.className ? props.className : 'btn btn-primary btn-sm';
-  let [likes, setLikes] = useState(tweet.likes ? tweet.likes : 0);
+  const likes = tweet.likes ? tweet.likes : 0;
   const actionDisplay = action.display ? action.display : 'action';
   const display = action.type === 'like' ? `${likes} ${actionDisplay}` : actionDisplay;
   const handleActionBackendEvent = (response, status) => {
-    if (status === 200) {
-      setLikes(response.likes)
+    if ((status === 200) | (status === 201) && didPerformAction) {
+      didPerformAction(response, status);
     }
-  }
+  };
   const handleClick = (event) => {
     event.preventDefault();
-    apiTweetAction(tweet.id, action.type, handleActionBackendEvent)
+    apiTweetAction(tweet.id, action.type, handleActionBackendEvent);
   };
   return (
     <button className={className} onClick={handleClick}>
@@ -61,30 +61,55 @@ export function ActionBtn(props) {
 }
 
 export function ParentTweet(props) {
-  const {tweet} = props;
-  return tweet.parent ? 
-  <div className='row'>
-  <div className='col-11 mx-auto p-3 border-rounded'>
-    <p className='mb-0 text-muted small'>Shared</p>
-    <Tweet className={' '} tweet={tweet.parent}/>
-  </div>
-  </div> : null
+  const { tweet } = props;
+  return tweet.parent ? (
+    <div className="row">
+      <div className="col-11 mx-auto p-3 border-rounded">
+        <p className="mb-0 text-muted small">Shared</p>
+        <Tweet className={' '} tweet={tweet.parent} />
+      </div>
+    </div>
+  ) : null;
 }
 
 export function Tweet(props) {
+  const [actionTweet, setActionTweet] = useState(props.tweet ? props.tweet : null);
   const className = props.className ? props.className : 'col-10 mx-auto col-md-6';
   const { tweet } = props;
+  const handlePerformAction = (newActionTweet, status) => {
+    if (status === 200) {
+      setActionTweet(newActionTweet);
+    } else if (status === 201) {
+      // Update Tweet List
+    }
+  };
   return (
     <div className={className}>
       <div>
-      <p>{tweet.id} - {tweet.content}</p>
-      <ParentTweet tweet={tweet} />
+        <p>
+          {tweet.id} - {tweet.content}
+        </p>
+        <ParentTweet tweet={tweet} />
       </div>
-      <div className="btn btn-group">
-        <ActionBtn tweet={tweet} action={{ type: 'like', display: 'like' }} />
-        <ActionBtn tweet={tweet} action={{ type: 'unlike', display: 'Unlike' }} />
-        <ActionBtn tweet={tweet} action={{ type: 'retweet', display: 'Retweet' }} />
-      </div>
+      {actionTweet && (
+        <div className="btn btn-group">
+          <ActionBtn
+            tweet={actionTweet}
+            didPerformAction={handlePerformAction}
+            action={{ type: 'like', display: 'like' }}
+          />
+          <ActionBtn
+            tweet={actionTweet}
+            didPerformAction={handlePerformAction}
+            action={{ type: 'unlike', display: 'Unlike' }}
+          />
+          <ActionBtn
+            tweet={actionTweet}
+            didPerformAction={handlePerformAction}
+            action={{ type: 'retweet', display: 'Retweet' }}
+          />
+        </div>
+      )}
     </div>
   );
 }
