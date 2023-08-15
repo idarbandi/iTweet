@@ -3,7 +3,7 @@ import { useEffect, useState } from 'react';
 import { apiTweetList, apiTweetCreate, apiTweetAction } from './lookup';
 
 export function TweetsComponent(props) {
-  console.log(props)
+  const {canTweet} = props.dataset.canTweet === 'false' ? false : true;
   const textAreaRef = createRef();
   const [newTweets, setnewTweets] = useState([]);
   const handleBackendUpdate = (response, status) => {
@@ -26,15 +26,15 @@ export function TweetsComponent(props) {
   };
   return (
     <div className={props.className}>
-      <div className="col-12 mb-3">
+      { canTweet === true && <div className="col-12 mb-3">
         <form onSubmit={handleSubmit}>
           <textarea ref={textAreaRef} required={true} className="form-control" name="tweet"></textarea>
           <button type="submit" className="btn btn-control my-3 bg-info">
             Tweet
           </button>
         </form>
-        <TweetsList newTweets={newTweets} />
-      </div>
+        <TweetsList newTweets={newTweets} {...props.dataset} />
+      </div>}
     </div>
   );
 }
@@ -138,9 +138,9 @@ export function TweetsList(props) {
           alert('Error');
         }
       };
-      apiTweetList(myCallback);
+      apiTweetList(props.username, myCallback);
     }
-  }, [tweetsInit, tweetsDidSet, setTweeetsDidSet]);
+  }, [tweetsInit, tweetsDidSet, setTweeetsDidSet, props.username]);
 
   const handleDidRetweet = (newTweet) => {
     const updateTweetsInit = [...tweetsInit];
