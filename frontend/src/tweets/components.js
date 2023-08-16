@@ -1,7 +1,9 @@
 import React from 'react';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { TweetsList } from './list';
 import { TweetCreate } from './create';
+import { apiTweetDetail } from './lookup';
+import { Tweet } from './detail';
 
 export function TweetsComponent(props) {
   const {canTweet} = props.dataset.canTweet === 'false' ? false : true;
@@ -18,4 +20,24 @@ export function TweetsComponent(props) {
       <TweetsList newTweets={newTweets} {...props} />
       </div>
   );
+}
+
+export function TweetDetailComponent(props) {
+  const {id} = props.dataset;
+  const [didlookup, setDidLookup] = useState(false)
+  const [tweet, setTweet] = useState(null)
+  const handleBackendLookup = (response, status) => {
+    if (status === 200) {
+      setTweet(response)
+    } else {
+      alert("an error occured during the detail get info")
+    }
+  }
+  useEffect(() => {
+    if (didlookup === false) {
+      apiTweetDetail(id, handleBackendLookup)
+      setDidLookup(true)
+    }
+  },[id, didlookup, setDidLookup])
+  return tweet === null ? null : <Tweet tweet={tweet} className={props.dataset.className} />
 }

@@ -24,9 +24,9 @@ export function TweetsList(props) {
             alert('Error');
           }
         };
-        apiTweetList(props.username, myCallback);
+        apiTweetList(props.dataset.username, myCallback);
       }
-    }, [tweetsInit, tweetsDidSet, setTweeetsDidSet, props.username]);
+    }, [tweetsInit, tweetsDidSet, setTweeetsDidSet, props.dataset.username]);
   
     const handleDidRetweet = (newTweet) => {
       const updateTweetsInit = [...tweetsInit];
