@@ -4,7 +4,7 @@ import os
 BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure-1yp#g74mx3bbo35(v5m&_2k6u58i!@3zndc-*diln8pt57gu96'
 DEBUG = True
-ALLOWED_HOSTS = ['127.0.0.1']
+ALLOWED_HOSTS = ['127.0.0.1', 'localhost']
 LOGIN_URL = "/login"
 
 MAX_TWEET_LENGTH = 240
