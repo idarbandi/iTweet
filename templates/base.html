@@ -7,8 +7,11 @@
     <title>Tweetme 2 {% block head_title %}{% endblock head_title%}</title>
   </head>
   <body>
-    <noscript>You need to enable JavaScript to run this app.</noscript><div id="tweetContainer"></div><div id="iTweet"></div><div id="root"></div>
-    </div>
+    
+    {% block content %}
+    
+    {% endblock  %}
+      
     {% include 'react/base_embed.html' %}
     {% include 'react/js.html' %}
   </body>
