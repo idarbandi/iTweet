@@ -7,6 +7,7 @@ import { apiTweetList } from './lookup';
 export function TweetsList(props) {
     const [tweetsInit, setTweetsInit] = useState([]);
     const [tweets, setTweets] = useState([]);
+    const [nextUrl, setNextUrl] = useState(null);
     const [tweetsDidSet, setTweeetsDidSet] = useState(false);
     useEffect(() => {
       const final = [...props.newTweets].concat(tweetsInit);
@@ -18,7 +19,8 @@ export function TweetsList(props) {
       if (tweetsDidSet === false) {
         const myCallback = (response, status) => {
           if (status === 200) {
-            setTweetsInit(response);
+            setNextUrl(response.next)
+            setTweetsInit(response.results);
             setTweeetsDidSet(true);
           } else {
             alert('Error');
@@ -27,6 +29,7 @@ export function TweetsList(props) {
         apiTweetList(props.dataset.username, myCallback);
       }
     }, [tweetsInit, tweetsDidSet, setTweeetsDidSet, props.dataset.username]);
+
   
     const handleDidRetweet = (newTweet) => {
       const updateTweetsInit = [...tweetsInit];
@@ -38,6 +41,11 @@ export function TweetsList(props) {
     };
   
     return tweets.map((item, index) => {
-      return <Tweet didretweet={handleDidRetweet} key={`${index}-{item.id}`} tweet={item} />;
+      return 
+      (
+        <React.Fragment>
+          <Tweet didretweet={handleDidRetweet} key={`${index}-{item.id}`} tweet={item} />;
+        </React.Fragment>
+      )
     });
   }
