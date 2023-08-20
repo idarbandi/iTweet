@@ -5,20 +5,24 @@ export function apiTweetCreate(newTweet, callback) {
 }
 
 export function apiTweetAction(tweetId, action, callback) {
-    const data = {id: tweetId, action: action}
-    backendLookup('POST', '/tweets/action/', callback, data);
-  }
-  
-
-export function apiTweetList(username, callback) {
-  let endpoint = '/tweets/'
-  if (username) {
-    endpoint = `/tweets/?username=${username}`
-  }
-  backendLookup('GET', endpoint , callback);
+  const data = { id: tweetId, action: action };
+  backendLookup('POST', '/tweets/action/', callback, data);
 }
 
+export function apiTweetList(username, callback, nextUrl, prevUrl) {
+  let endpoint = '/tweets/';
+  if (username) {
+    endpoint = `/tweets/?username=${username}`;
+  }
+  if (nextUrl !== null && nextUrl !== undefined) {
+    endpoint = nextUrl.replace('http://127.0.0.1:8000/api', '')
+  }
+  if (prevUrl !== null && nextUrl !== undefined) {
+    endpoint = nextUrl.replace('http://127.0.0.1:8000/api', '')
+  }
+  backendLookup('GET', endpoint, callback);
+}
 
 export function apiTweetDetail(tweetId, callback) {
-  backendLookup('GET', `/tweets/${tweetId}` , callback);
+  backendLookup('GET', `/tweets/${tweetId}`, callback);
 }

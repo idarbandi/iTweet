@@ -39,13 +39,27 @@ export function TweetsList(props) {
       updateFinalTweets.unshift(tweets);
       setTweets(updateFinalTweets);
     };
+
+    const handleloadNext = (event)  => {
+      event.preventDefault();
+      if (nextUrl) {
+        const handleLoadNextResponse = (response, status) => {
+          if (status === 200) {
+            setNextUrl(response.next)
+            setTweetsInit(response.results);
+            setTweets(response.results)
+          } else {
+            alert('There was an Error Loading Paginated Page');
+          }
+        }
+        apiTweetList(props.username, handleLoadNextResponse, nextUrl)
+      }
+    }
   
-    return tweets.map((item, index) => {
-      return 
-      (
-        <React.Fragment>
-          <Tweet didretweet={handleDidRetweet} key={`${index}-{item.id}`} tweet={item} />;
-        </React.Fragment>
-      )
-    });
+    return <React.Fragment>
+      {tweets.map((item, index) => {
+      return <Tweet didretweet={handleDidRetweet} key={`${index}-{item.id}`} tweet={item} />;
+      })}
+      {nextUrl !== null && <button className='btn btn-outline-primary' onClick={handleloadNext} >Next</button>}
+    </React.Fragment>;
   }

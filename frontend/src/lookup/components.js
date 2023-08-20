@@ -34,7 +34,6 @@ export function backendLookup(method, endpoint, callback, data){
     }
     xhr.onload = function () {
       if (xhr.status === 403) {
-        const detail = xhr.response.detail
         
           window.location.href = '/login'
         
