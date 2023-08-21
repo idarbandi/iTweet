@@ -1,0 +1,11 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+{% if request.user.is_authenticated %}
+    <div id='iTweet-Feed'></div>
+{% else %}
+    <div id='iTweet'></div>
+{% endif %}
+
+{% endblock content %}

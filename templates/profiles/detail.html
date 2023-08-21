@@ -1,3 +1,10 @@
-{% extends 'base.html' %} {% block content %}
-<div id="iTweet" data-username="{{ username }}" data-can-tweet="false"></div>
-{% endblock %}
+{% extends 'base.html' %}
+
+{% block content %}
+
+<div id='tweetme-2' 
+data-username="{{ username }}"
+data-is-following='{{ is_following }}'
+ data-can-tweet="false"></div>
+
+{% endblock content %}
