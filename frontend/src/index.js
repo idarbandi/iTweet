@@ -5,10 +5,12 @@ import { TweetsComponent } from './tweets';
 import { FeedComponent } from './tweets';
 import reportWebVitals from './reportWebVitals';
 import { TweetDetailComponent } from './tweets';
+import { ProfileBadgeComponent } from './profiles';
 
 const TweetsEl = document.getElementById('iTweet')
 const TweetsFeedEl = document.getElementById('iTweet-Feed')
 const TweetDetailEl = document.querySelectorAll('.iTweet-detail')
+const ProfileBadgeEl = document.querySelectorAll('.iTweet-profile-badge')
  
   if (TweetsFeedEl) {
   const tweetsFeedRoot = ReactDOM.createRoot(TweetsFeedEl);
@@ -36,5 +38,17 @@ TweetDetailEl.forEach(container => {
     </React.StrictMode>
   )
 })
+
+ProfileBadgeEl.forEach(container => {
+  const TweetDetailRoot = ReactDOM.createRoot(container);
+  TweetDetailRoot.render(
+    <React.StrictMode>
+      <ProfileBadgeComponent dataset={container.dataset}/>
+    </React.StrictMode>
+  )
+})
+
+
+
 reportWebVitals();
 
