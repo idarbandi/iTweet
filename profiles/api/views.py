@@ -34,6 +34,7 @@ def profile_detail_api_view(request, username, *args, **kwargs):
     return Response(data.data, status=200)
 
 
+
 @api_view(['GET', 'POST'])
 @permission_classes([IsAuthenticated])
 def user_follow_view(request, username, *args, **kwargs):
@@ -54,5 +55,5 @@ def user_follow_view(request, username, *args, **kwargs):
         profile.followers.remove(me)
     else:
         pass
-    current_followers_qs = profile.followers.all()
-    return Response({"count": current_followers_qs.count()}, status=200)
+    data = PublicProfileSerializer(instance=profile, context={"request": request})
+    return Response(data.data, status=200)
